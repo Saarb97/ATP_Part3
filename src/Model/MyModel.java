@@ -124,7 +124,7 @@ public class MyModel extends Observable implements IModel {
                 break;
             case "DOWN-RIGHT":
                 maze.getStartPosition().setRow(maze.getStartPosition().getRowIndex() + 1);
-                maze.getStartPosition().setColumn(maze.getStartPosition().getColumnIndex() + 1);
+                maze.getStartPosition().setColumn(maze.getStartPosition().getColumnIndex()+ 1);
                 break;
         }
         setChanged();

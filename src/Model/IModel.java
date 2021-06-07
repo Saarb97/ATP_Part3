@@ -6,7 +6,7 @@ public interface IModel {
     void generateMaze(int rowSize, int columnSize);
     int[][] getMazeBoard();
     int getPlayerRow();
-    int getPlayerCol();
+    int getPlayerCol(); 
     int getGoalRow();
     int getGoalCol();
     void movePlayer(String movement);
