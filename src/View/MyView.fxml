@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import View.MazeDisplayer?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+
+<BorderPane fx:id="mainBorderPane" onKeyPressed="#KeyPressed" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER" >
+            <Menu mnemonicParsing="false" text="File" >
+                <MenuItem fx:id="newGame" mnemonicParsing="false" onAction="#showNewGameDialog" text="New" style="-fx-background-color: #A9A9A9"/>
+                <SeparatorMenuItem />
+                <MenuItem fx:id="saveGame" mnemonicParsing="false" onAction="#saveGameAction" text="Save" style="-fx-background-color: #A9A9A9"/>
+                <SeparatorMenuItem />
+                <MenuItem fx:id="openGame" mnemonicParsing="false" onAction="#openGameAction" text="Open" style="-fx-background-color: #A9A9A9"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Options">
+                <MenuItem mnemonicParsing="false" onAction="#propertiesAction" text="Properties" style="-fx-background-color: #A9A9A9"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Exit">
+                <MenuItem mnemonicParsing="false" onAction="#exitGameAction" text="Exit game" style="-fx-background-color: #A9A9A9"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" onAction="#gameInstructions" text="Game instructions" style="-fx-background-color: #A9A9A9"/>
+                <SeparatorMenuItem />
+                <MenuItem mnemonicParsing="false" onAction="#gameRulesAction" text="Game rules" style="-fx-background-color: #A9A9A9"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="About">
+                <MenuItem mnemonicParsing="false" onAction="#solvingAlgorithmsAction" text="Solving algorithms" style="-fx-background-color: #A9A9A9"/>
+                <SeparatorMenuItem />
+                <MenuItem mnemonicParsing="false" onAction="#ownersAction" text="Creators" style="-fx-background-color: #A9A9A9"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Solution">
+                <MenuItem fx:id="getSolution" mnemonicParsing="false" onAction="#getSolutionAction" text="Display Solution" style="-fx-background-color: #A9A9A9"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <Pane BorderPane.alignment="CENTER">
+            <padding>
+                <Insets />
+            </padding>
+            <MazeDisplayer onScroll="#zoomMaze" fx:id="mazeDisplayer" height="768.0" imageFileNameCharacter="resources/Images/psgLogo.jpeg" imageFileNameGoal="resources/Images/trophy.jpeg" imageFileNamePath="resources/Images/grass.jpeg" imageFileNameSolutionPath="resources/Images/ball.jpg" imageFileNameWall="resources/Images/wall2.jpeg" width="1350.0" />
+        </Pane>
+    </center>
+</BorderPane>
