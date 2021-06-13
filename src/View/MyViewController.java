@@ -55,7 +55,9 @@ public class MyViewController implements IView, Observer, Initializable {
         String musicFile = "resources/sounds/gamesound.mp3";
         sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setVolume(0.1); //TEMP
         mediaPlayer.play();
+
     }
 
     public static void startWinningMusic() {
@@ -63,7 +65,9 @@ public class MyViewController implements IView, Observer, Initializable {
         String musicFile = "resources/sounds/victorysound.mp3";
         sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setVolume(0.1); //TEMP
         mediaPlayer.play();
+
     }
 
     public static void stopMusic() {
@@ -73,10 +77,17 @@ public class MyViewController implements IView, Observer, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println("test");
         startPlayingMusic();
         mazeDisplayer.setMyViewController(this);
         mazeDisplayer.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> mazeDisplayer.requestFocus());
-        Hashtable<String, Function> commandTable = new Hashtable<>();
+        this.commandTable = new Hashtable<>();
+        createGetSolution();
+        createDisplayGame();
+        createGenerateMaze();
+        createSaveGame();
+        createEnableAll();
+
     }
 
     @Override
@@ -101,8 +112,7 @@ public class MyViewController implements IView, Observer, Initializable {
 
 
     public void addDialogIconTo(Alert alert) {
-        // Add custom Image to Dialog's title bar
-        final Image APPLICATION_ICON = new Image("cc.jpg");
+        final Image APPLICATION_ICON = new Image("");
         Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
         dialogStage.getIcons().add(APPLICATION_ICON);
     }

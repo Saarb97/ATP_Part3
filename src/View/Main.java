@@ -28,7 +28,7 @@ public class Main extends Application {
         Parent root = fxmlLoader.load(getClass().getResource("MyView.fxml").openStream());
         primaryStage.setTitle("Maze Game");
         Scene scene = new Scene(root, 1200, 721);
-        //scene.getStylesheets().add(getClass().getResource("MyViewStyle.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("MyViewStyle.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
 

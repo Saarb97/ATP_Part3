@@ -38,8 +38,8 @@ public class MazeDisplayer extends Canvas{
         myViewController.disableAll();
         if (maze != null) {
             try {
-                initilizeCanvasVariables();
-                initilizeImages();
+                initializeCanvasVariables();
+                initializeImages();
                 clearCanvas();
 
                 for (int row = 0; row < getMazeRowSize(); row++) {
@@ -75,7 +75,7 @@ public class MazeDisplayer extends Canvas{
         return cellWidth;
     }
 
-    private void initilizeCanvasVariables() {
+    private void initializeCanvasVariables() {
         graphicsContext = getGraphicsContext2D();
         double canvasHeight = getHeight() * 0.9;
         double canvasWidth = getWidth() * 0.9;
@@ -89,7 +89,7 @@ public class MazeDisplayer extends Canvas{
     private Image pathImage;
     private Image solutionPathImage;
 
-    private void initilizeImages() {
+    private void initializeImages() {
         try {
             wallImage = new Image(new FileInputStream(ImageFileNameWall.get()));
             characterImage = new Image(new FileInputStream(ImageFileNameCharacter.get()));
@@ -235,7 +235,7 @@ public class MazeDisplayer extends Canvas{
 
     private void drawSolutionPath(int row, int column) {
         try {
-            initilizeSolutionPathImage();
+            initializeSolutionPathImage();
             if (isSolutionPathAvailable())
                 drawSolutionPathImage(row, column);
             else
@@ -244,7 +244,7 @@ public class MazeDisplayer extends Canvas{
         }
     }
 
-    private void initilizeSolutionPathImage() {
+    private void initializeSolutionPathImage() {
         try {
             solutionPathImage = new Image(new FileInputStream(ImageFileNameSolutionPath.get()));
         } catch (Exception e) {
