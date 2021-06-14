@@ -32,7 +32,7 @@ public class MyViewController implements IView, Observer, Initializable {
     private static boolean isSongPlaying = false;
     public static MediaPlayer mediaPlayer;
     MazeDisplayer mazeDisplay;
-
+    public Hashtable<String, Function> commandTable;
 
     @FXML
     private BorderPane mainBorderPane;
@@ -47,7 +47,7 @@ public class MyViewController implements IView, Observer, Initializable {
     @FXML
     MenuItem saveGame;
 
-    private Hashtable<String, Function> commandTable;
+
 
     public static void startPlayingMusic() {
         stopMusic();
@@ -77,11 +77,10 @@ public class MyViewController implements IView, Observer, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("test");
         startPlayingMusic();
         mazeDisplayer.setMyViewController(this);
         mazeDisplayer.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> mazeDisplayer.requestFocus());
-        this.commandTable = new Hashtable<>();
+        this.commandTable= new Hashtable<>();
         createGetSolution();
         createDisplayGame();
         createGenerateMaze();
@@ -92,6 +91,7 @@ public class MyViewController implements IView, Observer, Initializable {
 
     @Override
     public void update(Observable o, Object arg) {
+        System.out.println("update called");
         if (arg == null)
             return;
         isUnderCalculations = false;

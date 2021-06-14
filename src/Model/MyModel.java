@@ -29,7 +29,7 @@ public class MyModel extends Observable implements IModel {
     private Server solveSearchProblemServer;
 
     public MyModel() {
-        executor = Executors.newFixedThreadPool(5);
+        //executor = Executors.newFixedThreadPool(5);
         try {
             mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
             mazeGeneratingServer.start();
