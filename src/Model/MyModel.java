@@ -33,7 +33,6 @@ public class MyModel extends Observable implements IModel {
         try {
             mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
             mazeGeneratingServer.start();
-
             solveSearchProblemServer = new Server(5401, 1000, new ServerStrategySolveSearchProblem());
             solveSearchProblemServer.start();
         } catch (Exception ignored) {
