@@ -1,6 +1,6 @@
 package Model;
 
-import Client.Client;
+import Client.*;
 import IO.MyCompressorOutputStream;
 import IO.MyDecompressorInputStream;
 import Server.Server;
@@ -29,7 +29,7 @@ public class MyModel extends Observable implements IModel {
     private Server solveSearchProblemServer;
 
     public MyModel() {
-        //executor = Executors.newFixedThreadPool(5);
+        executor = Executors.newFixedThreadPool(5);
         try {
             mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
             mazeGeneratingServer.start();
@@ -59,7 +59,7 @@ public class MyModel extends Observable implements IModel {
                     }
 
                 });
-                client.start();
+                client.communicateWithServer();
                 setChanged();
                 notifyObservers("generateMaze");
             } catch (UnknownHostException var1) {
@@ -97,6 +97,7 @@ public class MyModel extends Observable implements IModel {
     }
 
     public void movePlayer(String movement) {
+        System.out.println(movement);
         switch (movement) {
             case "UP":
                 maze.getStartPosition().setRow(maze.getStartPosition().getRowIndex() - 1);
@@ -185,7 +186,7 @@ public class MyModel extends Observable implements IModel {
                         var10.printStackTrace();
                     }
                 });
-                client.start();
+                client.communicateWithServer();
             } catch (UnknownHostException var1) {
                 notifyObservers("EnableAll");
             }

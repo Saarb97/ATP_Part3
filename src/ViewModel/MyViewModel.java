@@ -11,7 +11,6 @@ import java.util.Observable;
 import java.util.Observer;
 import javafx.scene.input.MouseEvent;
 import View.MazeDisplayer;
-import org.jetbrains.annotations.NotNull;
 
 
 public class MyViewModel extends Observable implements Observer {
@@ -81,10 +80,15 @@ public class MyViewModel extends Observable implements Observer {
     }
 
     public void moveCharacter(KeyCode movement) {
-        if (isLegalMove(movement))
+        System.out.println("movechar started");
+        if (isLegalMove(movement)) {
+            System.out.println("move is legal");
             model.movePlayer(getMovement(movement));
-        else
+        }
+        else{
+            System.out.println("move not legal");
             notifyObservers("EnableAll");
+        }
     }
     public void solveGame() throws Exception {
         if (!model.isMazeExist()) {
@@ -187,9 +191,9 @@ public class MyViewModel extends Observable implements Observer {
         FileChooser fc = new FileChooser();
         setFileChooser(fc, "Save maze", "resources/MazeGames");
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".Maze", "*.Maze"));
-        File phil = fc.showSaveDialog(Main.primaryStage);
-        if (phil != null)
-            model.saveGame(phil.getAbsolutePath());
+        File file = fc.showSaveDialog(Main.primaryStage);
+        if (file != null)
+            model.saveGame(file.getAbsolutePath());
     }
 
 
@@ -211,7 +215,7 @@ public class MyViewModel extends Observable implements Observer {
         }
     }
 
-    private void setFileChooser(@NotNull FileChooser fc, String title, String initialDirectory) {
+    private void setFileChooser(FileChooser fc, String title, String initialDirectory) {
         fc.setTitle(title);
         fc.setInitialDirectory(new File(initialDirectory));
     }

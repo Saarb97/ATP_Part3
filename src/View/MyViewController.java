@@ -1,5 +1,6 @@
 package View;
 
+import Server.Configurations;
 import ViewModel.MyViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -91,7 +92,6 @@ public class MyViewController implements IView, Observer, Initializable {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("update called");
         if (arg == null)
             return;
         isUnderCalculations = false;
@@ -222,9 +222,9 @@ public class MyViewController implements IView, Observer, Initializable {
     }
 
     public void propertiesAction() { //TODO changeable properties
-        raiseAlert("Properties", "", "Number of threads : " + 5 + "\n" +
-                "Maze Generation Algorithm : " + "Prim Algorithm" + "\n" +
-                "Maze Solving Algorithm :  Breadth first search" );
+        raiseAlert("Properties", "", "Number of threads : " + Configurations.getInstance().getNumThreads() + "\n" +
+                "Maze Generation Algorithm : " + Configurations.getInstance().getMazeGenerator().getClass().getSimpleName() + "\n" +
+                "Maze Solving Algorithm :  "+Configurations.getInstance().getSearchingAlgorithm().getClass().getSimpleName() );
     }
 
     public void exitGameAction() {
