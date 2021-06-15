@@ -2,6 +2,7 @@ package View;
 
 import Server.Configurations;
 import ViewModel.MyViewModel;
+import algorithms.mazeGenerators.Maze;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -23,6 +25,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.function.Function;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class MyViewController implements IView, Observer, Initializable {
@@ -112,7 +115,7 @@ public class MyViewController implements IView, Observer, Initializable {
 
 
     public void addDialogIconTo(Alert alert) {
-        final Image APPLICATION_ICON = new Image("");
+        final Image APPLICATION_ICON = new Image("/resources/images/mazebackground.jpg");
         Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
         dialogStage.getIcons().add(APPLICATION_ICON);
     }
@@ -202,14 +205,27 @@ public class MyViewController implements IView, Observer, Initializable {
     }
 
     public void saveGameAction() {
-        if (isUnderCalculations)
-            return;
-        viewModel.saveGame();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Maze");
+        fileChooser.setInitialDirectory(new File("./resources/Saves"));
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("text files","*.txt"));
+        File fileToSave = fileChooser.showSaveDialog(null);
+        if(fileToSave != null)
+            viewModel.saveGame(fileToSave);
     }
 
 
     public void openGameAction() {
-        viewModel.openGame();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load Maze");
+        fileChooser.setInitialDirectory(new File("./resources/Saves"));
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("text files","*.txt"));
+        File file = fileChooser.showOpenDialog(null);
+        if(file != null) {
+            viewModel.openGame(file); //the user chose to load a maze not from the default directory
+            System.out.println("maze opened");
+        }
+
     }
 
     public void getSolutionAction() {
@@ -228,7 +244,11 @@ public class MyViewController implements IView, Observer, Initializable {
     }
 
     public void exitGameAction() {
-        viewModel.exitGame();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to quit the game?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (((Optional<?>) result).get() == ButtonType.OK)
+            viewModel.exitGame();
+
     }
 
     public void gameInstructions() {
@@ -274,6 +294,7 @@ public class MyViewController implements IView, Observer, Initializable {
     }
 
     public void zoomMaze(ScrollEvent scrollEvent) {
+        System.out.println("inZoomMaze");
         double zoomFactor = 0.001;
         double deltaY = scrollEvent.getDeltaY() * zoomFactor;
         Node p = mazeDisplayer;
@@ -281,6 +302,9 @@ public class MyViewController implements IView, Observer, Initializable {
             p.setScaleX(p.getScaleX() + deltaY);
             p.setScaleY(p.getScaleY() + deltaY);
         }
+    }
+    public void mouseDrag(MouseEvent me) {
+        viewModel.mouseDragged(me,mazeDisplayer.getHeight(),mazeDisplayer.getWidth());
     }
 
     public void disableAll() {

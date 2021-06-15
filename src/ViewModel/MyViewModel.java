@@ -80,12 +80,7 @@ public class MyViewModel extends Observable implements Observer {
     }
 
     public void moveCharacter(KeyCode movement) {
-        if (isLegalMove(movement)) {
-            model.movePlayer(getMovement(movement));
-        }
-        else{
-            notifyObservers("EnableAll");
-        }
+        model.initiatePlayerMove(movement);
     }
     public void solveGame() throws Exception {
         if (!model.isMazeExist()) {
@@ -98,118 +93,25 @@ public class MyViewModel extends Observable implements Observer {
         else
             model.solveGame();
     }
-    public void mouseDragged(MouseEvent mouseEvent) {
-        int maxSize = Math.max(model.getMazeBoard()[0].length, model.getMazeBoard().length);
-        double cellHeight = mazeDisplayer.getHeight() / maxSize;
-        double cellWidth = mazeDisplayer.getWidth() / maxSize;
-        double canvasHeight = mazeDisplayer.getHeight();
-        double canvasWidth = mazeDisplayer.getWidth();
-        int rowMazeSize = model.getMazeBoard().length;
-        int colMazeSize = model.getMazeBoard()[0].length;
-        double startRow = (canvasHeight / 2-(cellHeight * rowMazeSize / 2)) / cellHeight;
-        double startCol = (canvasWidth / 2-(cellWidth * colMazeSize / 2)) / cellWidth;
-        double mouseX = (int) ((mouseEvent.getX()) / (mazeDisplayer.getWidth() / maxSize)-startCol);
-        double mouseY = (int) ((mouseEvent.getY()) / (mazeDisplayer.getHeight() / maxSize)-startRow);
-
-        if (mouseY < model.getPlayerRow() && mouseX == model.getPlayerCol())
-            moveCharacter(KeyCode.UP);
-        if (mouseY > model.getPlayerRow() && mouseX == model.getPlayerCol())
-            moveCharacter(KeyCode.DOWN);
-        if (mouseX < model.getPlayerCol() && mouseY == model.getPlayerRow())
-            moveCharacter(KeyCode.LEFT);
-        if (mouseX > model.getPlayerCol() && mouseY == model.getPlayerRow())
-            moveCharacter(KeyCode.RIGHT);
-    }
-
-    private boolean isLegalMove(KeyCode movement) {
-        switch (getMovement(movement)) {
-            case "UP":
-                return isLegalMove(currentRowIndex - 1, currentColumnIndex);
-            case "DOWN":
-                return isLegalMove(currentRowIndex + 1, currentColumnIndex);
-            case "RIGHT":
-                return isLegalMove(currentRowIndex, currentColumnIndex + 1);
-            case "LEFT":
-                return isLegalMove(currentRowIndex, currentColumnIndex - 1);
-            case "UP-LEFT":
-                return isLegalMove(currentRowIndex - 1, currentColumnIndex - 1) && (isLegalMove(currentRowIndex - 1, currentColumnIndex) || isLegalMove(currentRowIndex , currentColumnIndex - 1));
-            case "UP-RIGHT":
-                return isLegalMove(currentRowIndex - 1, currentColumnIndex + 1) && (isLegalMove(currentRowIndex - 1, currentColumnIndex) || isLegalMove(currentRowIndex , currentColumnIndex + 1));
-            case "DOWN-LEFT":
-                return isLegalMove(currentRowIndex + 1, currentColumnIndex - 1) && (isLegalMove(currentRowIndex + 1, currentColumnIndex) || isLegalMove(currentRowIndex , currentColumnIndex - 1));
-            case "DOWN-RIGHT":
-                return isLegalMove(currentRowIndex + 1, currentColumnIndex + 1) && (isLegalMove(currentRowIndex + 1, currentColumnIndex) || isLegalMove(currentRowIndex , currentColumnIndex + 1));
-            default:
-                notifyObservers("EnableAll");
-                return false;
-        }
+    public void mouseDragged(MouseEvent me,double height,double width) {
+        model.mouseDrag(me,height,width);
     }
 
 
-    private String getMovement(KeyCode movement) {
-        if (movement == KeyCode.UP || movement == KeyCode.NUMPAD8)
-            return "UP";
-        else if (movement == KeyCode.DOWN || movement == KeyCode.NUMPAD2)
-            return "DOWN";
-        else if (movement == KeyCode.LEFT || movement == KeyCode.NUMPAD4)
-            return "LEFT";
-        else if (movement == KeyCode.RIGHT || movement == KeyCode.NUMPAD6)
-            return "RIGHT";
-        else if (movement == KeyCode.NUMPAD7)
-            return "UP-LEFT";
-        else if (movement == KeyCode.NUMPAD9)
-            return "UP-RIGHT";
-        else if (movement == KeyCode.NUMPAD1)
-            return "DOWN-LEFT";
-        else if (movement == KeyCode.NUMPAD3 )
-            return "DOWN-RIGHT";
-        return "STAY";
-    }
 
-    private boolean isLegalMove(int row, int column) {
-        return isInBorders(row, column) && isACorridor(row, column);
-    }
-
-    private boolean isACorridor(int row, int column) {
-        return maze[row][column] == 0;
-    }
-
-    private boolean isInBorders(int row, int column) {
-        return row >= 0 && row < maze.length && column >= 0 && column < maze[0].length;
-    }
-
-    public void saveGame() {
+    public void saveGame(File file) {
         if (!model.isMazeExist()) {
             raiseAlert("Warning!",
-                    "Warning!",
-                    "Maze does not exist, cannot be saved.");
+                    "",
+                    "No maze to be saved");
             return;
         }
-        FileChooser fc = new FileChooser();
-        setFileChooser(fc, "Save maze", "resources/MazeGames");
-        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".Maze", "*.Maze"));
-        File file = fc.showSaveDialog(Main.primaryStage);
-        if (file != null)
-            model.saveGame(file.getAbsolutePath());
+        model.saveGame(file.getAbsolutePath());
     }
 
 
-    public void openGame() {
-        FileChooser fc = new FileChooser();
-        setFileChooser(fc, "Open maze", "resources/MazeGames");
-        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("*.Maze", "*.Maze"));
-        try {
-            File selectedFile = fc.showOpenDialog(null);
-            if (selectedFile != null)
-                model.openMazeFile(selectedFile.getAbsolutePath());
-            else
-                notifyObservers("EnableAll");
-        } catch (Exception e) {
-            notifyObservers("EnableAll");
-            raiseAlert("Warning",
-                    "",
-                    "Only .Maze files can be opened");
-        }
+    public void openGame(File file) {
+        model.openMazeFile(file.getAbsolutePath());
     }
 
     private void setFileChooser(FileChooser fc, String title, String initialDirectory) {
@@ -236,5 +138,6 @@ public class MyViewModel extends Observable implements Observer {
     public void deleteGame() {
         model.deleteMaze();
     }
+
 
 }

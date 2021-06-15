@@ -1,5 +1,8 @@
 package Model;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+
 import java.util.Observer;
 
 public interface IModel {
@@ -17,4 +20,6 @@ public interface IModel {
     int[][] getGameSolution();
     void exitGame();
     void deleteMaze();
+    void mouseDrag(MouseEvent me, double height, double width);
+    void initiatePlayerMove(KeyCode movement);
 }

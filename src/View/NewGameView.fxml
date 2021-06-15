@@ -6,13 +6,13 @@
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="View.NewGameViewController"
-            prefHeight="70.0" prefWidth="300.0" style="-fx-background-color: #99ccff">
+            prefHeight="70.0" prefWidth="300.0" >
     <content>
         <GridPane vgap="10" hgap="10" style="-fx-background-color: #808080">
             <Label text="Row size:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-            <TextField fx:id="rowSize" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-background-color: #F8F8F8"/>
+            <TextField fx:id="rowSize" GridPane.rowIndex="0" GridPane.columnIndex="1" />
             <Label text="Column size:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <TextField fx:id="columnSize" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-background-color: #F8F8F8"/>
+            <TextField fx:id="columnSize" GridPane.rowIndex="1" GridPane.columnIndex="1" />
         </GridPane>
     </content>
 

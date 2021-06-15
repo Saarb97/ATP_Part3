@@ -77,8 +77,10 @@ public class MazeDisplayer extends Canvas{
 
     private void initializeCanvasVariables() {
         graphicsContext = getGraphicsContext2D();
-        double canvasHeight = getHeight() * 0.9;
-        double canvasWidth = getWidth() * 0.9;
+        /*double canvasHeight = getHeight() * 0.9;
+        double canvasWidth = getWidth() * 0.9;*/
+        double canvasHeight = getHeight();
+        double canvasWidth = getWidth();
         cellHeight = canvasHeight / getMazeRowSize();
         cellWidth = canvasWidth / getMazeColumnSize();
     }

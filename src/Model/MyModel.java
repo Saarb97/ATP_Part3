@@ -18,6 +18,8 @@ import algorithms.search.AState;
 import algorithms.search.MazeState;
 import algorithms.search.Solution;
 import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 
 
 public class MyModel extends Observable implements IModel {
@@ -62,7 +64,6 @@ public class MyModel extends Observable implements IModel {
                 client.communicateWithServer();
                 setChanged();
                 notifyObservers("generateMaze");
-                maze.print();
             } catch (UnknownHostException var1) {
             }
         }));
@@ -96,6 +97,75 @@ public class MyModel extends Observable implements IModel {
     public int getGoalCol() {
         return maze.getGoalPosition().getColumnIndex();
     }
+
+    public void initiatePlayerMove(KeyCode movement) {
+        if (isLegalMove(movement)) {
+            movePlayer(getMovement(movement));
+        }
+        else{
+            notifyObservers("EnableAll");
+        }
+    }
+
+
+    public boolean isLegalMove(KeyCode movement) {
+        switch (getMovement(movement)) {
+            case "UP":
+                return isLegalMove(getPlayerRow() - 1, getPlayerCol());
+            case "DOWN":
+                return isLegalMove(getPlayerRow() + 1, getPlayerCol());
+            case "RIGHT":
+                return isLegalMove(getPlayerRow(), getPlayerCol() + 1);
+            case "LEFT":
+                return isLegalMove(getPlayerRow(), getPlayerCol() - 1);
+            case "UP-LEFT":
+                return isLegalMove(getPlayerRow() - 1, getPlayerCol() - 1) && (isLegalMove(getPlayerRow() - 1, getPlayerCol()) || isLegalMove(getPlayerRow() , getPlayerCol() - 1));
+            case "UP-RIGHT":
+                return isLegalMove(getPlayerRow() - 1, getPlayerCol() + 1) && (isLegalMove(getPlayerRow() - 1, getPlayerCol()) || isLegalMove(getPlayerRow() , getPlayerCol() + 1));
+            case "DOWN-LEFT":
+                return isLegalMove(getPlayerRow() + 1, getPlayerCol() - 1) && (isLegalMove(getPlayerRow() + 1, getPlayerCol()) || isLegalMove(getPlayerRow() , getPlayerCol() - 1));
+            case "DOWN-RIGHT":
+                return isLegalMove(getPlayerRow() + 1, getPlayerCol() + 1) && (isLegalMove(getPlayerRow() + 1, getPlayerCol()) || isLegalMove(getPlayerRow() , getPlayerCol() + 1));
+            default:
+                notifyObservers("EnableAll");
+                return false;
+        }
+    }
+
+
+    private String getMovement(KeyCode movement) {
+        if (movement == KeyCode.UP || movement == KeyCode.NUMPAD8)
+            return "UP";
+        else if (movement == KeyCode.DOWN || movement == KeyCode.NUMPAD2)
+            return "DOWN";
+        else if (movement == KeyCode.LEFT || movement == KeyCode.NUMPAD4)
+            return "LEFT";
+        else if (movement == KeyCode.RIGHT || movement == KeyCode.NUMPAD6)
+            return "RIGHT";
+        else if (movement == KeyCode.NUMPAD7)
+            return "UP-LEFT";
+        else if (movement == KeyCode.NUMPAD9)
+            return "UP-RIGHT";
+        else if (movement == KeyCode.NUMPAD1)
+            return "DOWN-LEFT";
+        else if (movement == KeyCode.NUMPAD3 )
+            return "DOWN-RIGHT";
+        return "STAY";
+    }
+
+    private boolean isLegalMove(int row, int column) {
+        return isInBorders(row, column) && isACorridor(row, column);
+    }
+
+    private boolean isACorridor(int row, int column) {
+        return maze.getMazeArr()[row][column] == 0;
+    }
+
+    private boolean isInBorders(int row, int column) {
+        return row >= 0 && row < maze.getMazeArr().length && column >= 0 && column < maze.getMazeArr()[0].length;
+    }
+
+
 
     public void movePlayer(String movement) {
         switch (movement) {
@@ -135,11 +205,12 @@ public class MyModel extends Observable implements IModel {
 
     public void saveGame(String path) {
         MyCompressorOutputStream myCompressorOutputStream;
-        notifyObservers("SaveGame");
+
         try {
             myCompressorOutputStream = new MyCompressorOutputStream(new FileOutputStream(path));
             myCompressorOutputStream.write(maze.toByteArray());
             myCompressorOutputStream.close();
+            notifyObservers("SaveGame");
         } catch (IOException e) {
             notifyObservers("EnableAll");
         }
@@ -210,4 +281,29 @@ public class MyModel extends Observable implements IModel {
     {
         maze = null;
     }
+
+    public void mouseDrag(MouseEvent me,double height, double width) {
+        int[][] mazeArr = maze.getMazeArr();
+        int maxSize = Math.max(mazeArr[0].length, mazeArr.length);
+        double cellHeight = height / maxSize;
+        double cellWidth = width / maxSize;
+        double canvasHeight = height;
+        double canvasWidth = width;
+        int rowMazeSize = mazeArr.length;
+        int colMazeSize = mazeArr[0].length;
+        double startRow = (canvasHeight / 2-(cellHeight * rowMazeSize / 2)) / cellHeight;
+        double startCol = (canvasWidth / 2-(cellWidth * colMazeSize / 2)) / cellWidth;
+        double mouseX = (int) ((me.getX()) / (width / maxSize)-startCol);
+        double mouseY = (int) ((me.getY()) / (height / maxSize)-startRow);
+
+        if (mouseY < getPlayerRow() && mouseX ==getPlayerCol())
+            initiatePlayerMove(KeyCode.UP);
+        if (mouseY >getPlayerRow() && mouseX == getPlayerCol())
+            initiatePlayerMove(KeyCode.DOWN);
+        if (mouseX < getPlayerCol() && mouseY == getPlayerRow())
+            initiatePlayerMove(KeyCode.LEFT);
+        if (mouseX > getPlayerCol() && mouseY == getPlayerRow())
+            initiatePlayerMove(KeyCode.RIGHT);
+    }
 }
+
