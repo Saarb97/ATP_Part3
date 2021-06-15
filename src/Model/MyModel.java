@@ -33,6 +33,7 @@ public class MyModel extends Observable implements IModel {
         try {
             mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
             mazeGeneratingServer.start();
+
             solveSearchProblemServer = new Server(5401, 1000, new ServerStrategySolveSearchProblem());
             solveSearchProblemServer.start();
         } catch (Exception ignored) {
@@ -62,6 +63,7 @@ public class MyModel extends Observable implements IModel {
                 client.communicateWithServer();
                 setChanged();
                 notifyObservers("generateMaze");
+                maze.print();
             } catch (UnknownHostException var1) {
             }
         }));
@@ -97,7 +99,6 @@ public class MyModel extends Observable implements IModel {
     }
 
     public void movePlayer(String movement) {
-        System.out.println(movement);
         switch (movement) {
             case "UP":
                 maze.getStartPosition().setRow(maze.getStartPosition().getRowIndex() - 1);
@@ -128,6 +129,7 @@ public class MyModel extends Observable implements IModel {
                 maze.getStartPosition().setColumn(maze.getStartPosition().getColumnIndex()+ 1);
                 break;
         }
+
         setChanged();
         notifyObservers("displayGame");
     }

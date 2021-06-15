@@ -80,13 +80,10 @@ public class MyViewModel extends Observable implements Observer {
     }
 
     public void moveCharacter(KeyCode movement) {
-        System.out.println("movechar started");
         if (isLegalMove(movement)) {
-            System.out.println("move is legal");
             model.movePlayer(getMovement(movement));
         }
         else{
-            System.out.println("move not legal");
             notifyObservers("EnableAll");
         }
     }
