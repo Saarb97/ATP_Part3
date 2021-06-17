@@ -45,7 +45,7 @@
             <padding>
                 <Insets />
             </padding>
-            <MazeDisplayer fx:id="mazeDisplayer" height="768.0" imageFileNameCharacter="resources/Images/player.png" imageFileNameGoal="resources/Images/goal.jpg" imageFileNamePath="resources/Images/grass.jpg" imageFileNameSolutionPath="resources/Images/ball.jpg" imageFileNameWall="resources/Images/wall3.jpg" onScroll="#zoomMaze" width="1350.0" />
+            <MazeDisplayer fx:id="mazeDisplayer" height="768.0" imageFileNameCharacter="resources/Images/player.png" imageFileNameGoal="resources/Images/goal.jpg" imageFileNamePath="resources/Images/grass.jpg" imageFileNameSolutionPath="resources/Images/path.jpeg" imageFileNameWall="resources/Images/wall3.jpg" onScroll="#zoomMaze" width="1350.0" />
         </Pane>
     </center>
 </BorderPane>

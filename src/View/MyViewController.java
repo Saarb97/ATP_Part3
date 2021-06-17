@@ -1,5 +1,6 @@
 package View;
 
+import IO.MyCompressorOutputStream;
 import Server.Configurations;
 import ViewModel.MyViewModel;
 import algorithms.mazeGenerators.Maze;
@@ -20,6 +21,8 @@ import javafx.scene.layout.BorderPane;
 import java.io.File;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -257,23 +260,24 @@ public class MyViewController implements IView, Observer, Initializable {
                 "This game is a basic maze solving game. \n" +
                         "The character can be moved in all 8 directions, but not through the maze walls!  \n" +
                         "You can create a new game, load or save a game in the file menu. \n" +
-                        "If you need some help, you can display the solution by clicking on the solution button in the menu.");
+                        "If you need some help, you can display the solution by clicking on the solution button in the navigation bar.");
     }
 
     public void gameRulesAction() {
         raiseAlert("Game rules",
                 "",
-                "guide your character through the maze. \n " +
-                        "your character's location is marked with a picture of it.\n" +
-                        "The exit point is also marked. \n" +
-                        "Move your character with the numpad. \n" +
+                "Guide your character through the maze. \n" +
+                        "Your character's location is marked with a picture of a thinking emoji.\n" +
+                        "The exit point is also marked by in-love emoji. \n" +
+                        "Move your character with the numpad or the arrow keys. \n" +
                         "Enjoy!");
     }
 
     public void solvingAlgorithmsAction() {
+        Configurations config = Configurations.getInstance();
         raiseAlert("Maze Solving algorithm: ",
                 "",
-                "Breadth first search algorithm"); //TODO changeable settings
+                config.getSearchingAlgorithm().getClass().getSimpleName());
     }
 
     public void ownersAction() {
@@ -304,7 +308,10 @@ public class MyViewController implements IView, Observer, Initializable {
         }
     }
     public void mouseDrag(MouseEvent me) {
-        viewModel.mouseDragged(me,mazeDisplayer.getHeight(),mazeDisplayer.getWidth());
+        try {
+            viewModel.mouseDragged(me,mazeDisplayer.getHeight(),mazeDisplayer.getWidth());
+        } catch (NullPointerException e) {} //null pointer invoked when there is no acive maze
+
     }
 
     public void disableAll() {
